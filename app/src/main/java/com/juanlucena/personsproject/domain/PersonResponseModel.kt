@@ -1,5 +1,17 @@
 package com.juanlucena.personsproject.domain
 
+import com.juanlucena.personsproject.data.database.entity.CoordinatesEntity
+import com.juanlucena.personsproject.data.database.entity.DobEntity
+import com.juanlucena.personsproject.data.database.entity.IdentificationEntity
+import com.juanlucena.personsproject.data.database.entity.LocationEntity
+import com.juanlucena.personsproject.data.database.entity.LoginEntity
+import com.juanlucena.personsproject.data.database.entity.NameEntity
+import com.juanlucena.personsproject.data.database.entity.PersonEntity
+import com.juanlucena.personsproject.data.database.entity.PictureEntity
+import com.juanlucena.personsproject.data.database.entity.RegisteredEntity
+import com.juanlucena.personsproject.data.database.entity.StreetEntity
+import com.juanlucena.personsproject.data.database.entity.TimezoneEntity
+
 data class PersonResponseModel (
     val results : List<PersonModel>,
     val info : InfoModel
@@ -18,7 +30,7 @@ data class PersonModel (
     val cell : String,
     val id : IdModel,
     val picture : PictureModel,
-    val nat : String
+    val nat : String,
 )
 
 data class InfoModel (
@@ -100,3 +112,81 @@ data class TimezoneModel (
     val offset : String,
     val description : String
 )
+
+fun PersonModel.toEntity() = PersonEntity(
+    gender = gender,
+    name = name.toEntity(),
+    location = location.toEntity(),
+    email = email,
+    login = login.toEntity(),
+    dob = dob.toEntity(),
+    registered = registered.toEntity(),
+    phone = phone,
+    cell = cell,
+    picture = picture.toEntity(),
+    nat = nat,
+    identificationEntity = id.toEntity()
+)
+
+fun NameModel.toEntity() = NameEntity(
+    title = title,
+    first = first,
+    last = last
+)
+
+fun LocationModel.toEntity() = LocationEntity(
+    street = street.toEntity(),
+    city = city,
+    state = state,
+    country = country,
+    postcode = postcode,
+    coordinates = coordinates.toEntity(),
+    timezone = timezone.toEntity()
+)
+
+fun StreetModel.toEntity() = StreetEntity(
+    number = number,
+    name = name
+)
+
+fun CoordinatesModel.toEntity() = CoordinatesEntity(
+    latitude = latitude,
+    longitude = longitude
+)
+
+fun TimezoneModel.toEntity() = TimezoneEntity(
+    offset = offset,
+    description = description
+)
+
+fun LoginModel.toEntity() = LoginEntity(
+    uuid = uuid,
+    username = username,
+    password = password,
+    salt = salt,
+    md5 = md5,
+    sha1 = sha1,
+    sha256 = sha256
+)
+
+fun DobModel.toEntity() = DobEntity(
+    date = date,
+    age = age
+)
+
+fun RegisteredModel.toEntity() = RegisteredEntity(
+    date = date,
+    age = age
+)
+
+fun PictureModel.toEntity() = PictureEntity(
+    large = large,
+    medium = medium,
+    thumbnail = thumbnail
+)
+
+fun IdModel.toEntity() = IdentificationEntity(
+    name = name,
+    value = value
+)
+

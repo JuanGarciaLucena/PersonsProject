@@ -6,7 +6,12 @@
     <string name="detail_person_phone_label">Phone number: %1$s</string>
     <string name="detail_person_address_label">Address: %1$s %2$s, %3$s</string>
 
+    <!-- Favorites strings -->
+    <string name="favorite_label">Favorites</string>
+
     <!-- Images content description -->
+    <string name="content_description_person_list_button">Person list</string>
+    <string name="content_description_favorites_button">Favorites list</string>
     <string name="content_description_back_nav">Back navigation</string>
     <string name="content_description_add_favorite">Add favorite</string>
 </resources>
