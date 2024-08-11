@@ -50,7 +50,6 @@ import com.juanlucena.personsproject.utils.DateUtils
 fun PersonDetail(navController: NavController, personViewModel: PersonViewModel){
 
     val selectedPerson by personViewModel.selectedPerson.collectAsState()
-    val isFavorite by personViewModel.isFavorite.collectAsState()
     var localIsFavorite by remember { mutableStateOf(selectedPerson?.isFavorite == true) }
     val context = LocalContext.current
 

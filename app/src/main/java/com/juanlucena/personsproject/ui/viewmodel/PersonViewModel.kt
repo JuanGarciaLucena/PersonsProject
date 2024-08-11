@@ -1,9 +1,6 @@
 package com.juanlucena.personsproject.ui.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.juanlucena.personsproject.data.database.entity.toModel
@@ -16,13 +13,10 @@ import com.juanlucena.personsproject.ui.states.PersonListUiState
 import com.juanlucena.personsproject.utils.Result
 import com.juanlucena.personsproject.utils.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,9 +40,6 @@ class PersonViewModel @Inject constructor(private val personRepositoryImpl: Pers
         PersonListUiState.SuccessDb(emptyList())
     )
     val savedPersonsInDb: StateFlow<PersonListUiState> = _personSavedInDbListFlow
-
-    private val _isFavorite = MutableStateFlow<Boolean?>(null)
-    val isFavorite: StateFlow<Boolean?> = _isFavorite.asStateFlow()
 
     init {
         getPersons()
@@ -88,7 +79,6 @@ class PersonViewModel @Inject constructor(private val personRepositoryImpl: Pers
     fun addPersonToFavorites(personModel: PersonModel) {
         viewModelScope.launch {
             personRepositoryImpl.addPersonToFavorites(personModel)
-            _isFavorite.value = true
         }
     }
 
@@ -110,31 +100,9 @@ class PersonViewModel @Inject constructor(private val personRepositoryImpl: Pers
         }
     }
 
-    fun checkIsFavorite(email: String) {
-        viewModelScope.launch {
-            _isFavorite.value = personRepositoryImpl.isPersonFavorite(email).firstOrNull()
-        }
-    }
-
     fun deletePersonFromFavorites(person: PersonModel) {
         viewModelScope.launch {
             personRepositoryImpl.deletePersonFromFavorites(person)
-            _isFavorite.value = false
-        }
-    }
-
-    fun updatePersonInDb(person: PersonModel) {
-        if (_personSavedInDbListFlow.value is PersonListUiState.SuccessDb) {
-            _personSavedInDbListFlow.update { state ->
-                if (state is PersonListUiState.SuccessDb) {
-                    val updatedList = state.data.map {
-                        if (it.email == person.email) person else it
-                    }
-                    PersonListUiState.SuccessDb(updatedList)
-                } else {
-                    state
-                }
-            }
         }
     }
 }
