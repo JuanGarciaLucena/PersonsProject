@@ -1,4 +1,4 @@
-package com.juanlucena.personsproject.ui.screens
+package com.juanlucena.personsproject.ui.screens.personDetailScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.juanlucena.personsproject.R
+import com.juanlucena.personsproject.domain.PersonModel
 import com.juanlucena.personsproject.ui.common.AppToolbar
 import com.juanlucena.personsproject.ui.theme.BlueLight
 import com.juanlucena.personsproject.ui.viewmodel.PersonViewModel
@@ -41,6 +45,8 @@ import com.juanlucena.personsproject.ui.viewmodel.PersonViewModel
 fun PersonDetail(navController: NavController, personViewModel: PersonViewModel){
 
     val selectedPerson by personViewModel.selectedPerson.collectAsState()
+    val isFavorite by personViewModel.isFavorite.collectAsState()
+    var localIsFavorite by remember { mutableStateOf(selectedPerson?.isFavorite == true) }
 
     Scaffold(
         bottomBar = { },
@@ -57,12 +63,21 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Acción para guardar en favoritos */ }) {
+                    IconButton(onClick = {
+                        localIsFavorite = !localIsFavorite
+                        selectedPerson?.isFavorite = localIsFavorite
+                        addOrDeleteFromDb(personViewModel, selectedPerson!!)
+                    }) {
+
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_favorite_empty),
+                            painter = if (localIsFavorite) {
+                                painterResource(id = R.drawable.ic_favorite_filled)
+                            } else {
+                                painterResource(id = R.drawable.ic_favorite_empty)
+                            },
                             contentDescription = stringResource(id = R.string.content_description_add_favorite),
-                            tint = Color.White
-                        )
+                                tint = Color.White
+                            )
                     }
                 }
             )
@@ -71,7 +86,6 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
     {
 
         it.calculateBottomPadding()
-
 
         MaterialTheme {
             Box(
@@ -147,5 +161,14 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
                 }
             }
         }
+    }
+}
+
+private fun addOrDeleteFromDb(personViewModel: PersonViewModel, selectedPerson: PersonModel){
+
+    if(selectedPerson.isFavorite){
+        personViewModel.addPersonToFavorites(selectedPerson)
+    } else{
+        personViewModel.deletePersonFromFavorites(selectedPerson)
     }
 }

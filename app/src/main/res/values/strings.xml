@@ -9,6 +9,10 @@
     <!-- Favorites strings -->
     <string name="favorite_label">Favorites</string>
 
+    <!-- Default messages -->
+    <string name="default_empty_favorite_list_label">No tiene favoritos guardados</string>
+    <string name="default_empty_list_label">No se han encontrado resultados</string>
+
     <!-- Images content description -->
     <string name="content_description_person_list_button">Person list</string>
     <string name="content_description_favorites_button">Favorites list</string>

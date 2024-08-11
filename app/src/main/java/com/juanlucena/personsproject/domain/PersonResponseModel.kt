@@ -31,6 +31,7 @@ data class PersonModel (
     val id : IdModel,
     val picture : PictureModel,
     val nat : String,
+    var isFavorite : Boolean
 )
 
 data class InfoModel (
@@ -125,7 +126,8 @@ fun PersonModel.toEntity() = PersonEntity(
     cell = cell,
     picture = picture.toEntity(),
     nat = nat,
-    identificationEntity = id.toEntity()
+    identificationEntity = id.toEntity(),
+    isFavorite = isFavorite
 )
 
 fun NameModel.toEntity() = NameEntity(

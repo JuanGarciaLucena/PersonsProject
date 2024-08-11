@@ -1,4 +1,4 @@
-package com.juanlucena.personsproject.ui.screens
+package com.juanlucena.personsproject.ui.screens.commonScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

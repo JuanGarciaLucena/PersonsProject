@@ -133,7 +133,8 @@ fun Results.toDomain() = PersonModel(
     cell = cell,
     id = id.toDomain(),
     picture = picture.toDomain(),
-    nat = nat
+    nat = nat,
+    isFavorite = false
 )
 
 fun Info.toDomain() = InfoModel(

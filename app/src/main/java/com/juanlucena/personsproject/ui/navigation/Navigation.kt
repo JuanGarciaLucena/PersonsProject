@@ -5,9 +5,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.juanlucena.personsproject.ui.screens.FavoritesScreen
-import com.juanlucena.personsproject.ui.screens.PersonDetail
-import com.juanlucena.personsproject.ui.screens.PersonListScreen
+import com.juanlucena.personsproject.ui.screens.favoritesScreen.FavoritesScreen
+import com.juanlucena.personsproject.ui.screens.personDetailScreen.PersonDetail
+import com.juanlucena.personsproject.ui.screens.personListScreen.PersonListScreen
 import com.juanlucena.personsproject.ui.viewmodel.PersonViewModel
 
 
@@ -27,7 +27,7 @@ fun MyAppNavHost() {
             PersonDetail(navController, personViewModel)
         }
         composable(route = "FavoritesScreen") {
-            FavoritesScreen(navController)
+            FavoritesScreen(navController, personViewModel)
         }
     }
 }
