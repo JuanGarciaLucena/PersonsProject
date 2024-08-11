@@ -5,6 +5,10 @@
     <string name="detail_person_info_label">Person Information</string>
     <string name="detail_person_phone_label">Phone number: %1$s</string>
     <string name="detail_person_address_label">Address: %1$s %2$s, %3$s</string>
+    <string name="detail_person_birthdate_label">Birthdate: %1$s</string>
+    <string name="detail_person_age_label">Age: %1$s</string>
+    <string name="detail_person_username_label">Username: %1$s</string>
+    <string name="detail_person_gender_label">Gender: %1$s</string>
 
     <!-- Favorites strings -->
     <string name="favorite_label">Favorites</string>

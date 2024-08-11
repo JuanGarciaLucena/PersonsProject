@@ -1,5 +1,8 @@
 package com.juanlucena.personsproject.ui.screens.personDetailScreen
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +44,7 @@ import com.juanlucena.personsproject.domain.PersonModel
 import com.juanlucena.personsproject.ui.common.AppToolbar
 import com.juanlucena.personsproject.ui.theme.BlueLight
 import com.juanlucena.personsproject.ui.viewmodel.PersonViewModel
+import com.juanlucena.personsproject.utils.DateUtils
 
 @Composable
 fun PersonDetail(navController: NavController, personViewModel: PersonViewModel){
@@ -47,6 +52,7 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
     val selectedPerson by personViewModel.selectedPerson.collectAsState()
     val isFavorite by personViewModel.isFavorite.collectAsState()
     var localIsFavorite by remember { mutableStateOf(selectedPerson?.isFavorite == true) }
+    val context = LocalContext.current
 
     Scaffold(
         bottomBar = { },
@@ -121,7 +127,13 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
                     Text(
                         text = "${selectedPerson?.email}",
                         color = Color.Black, fontSize = 20.sp,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.clickable {
+                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                data = Uri.parse("mailto:${selectedPerson?.email}")
+                            }
+                            context.startActivity(intent)
+                        }
                     )
 
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -145,7 +157,13 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
                                     text = stringResource(
                                         R.string.detail_person_phone_label,
                                         selectedPerson?.phone.toString()
-                                    )
+                                    ),
+                                    modifier = Modifier.clickable {
+                                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                                            data = Uri.parse("tel:${selectedPerson?.phone}")
+                                        }
+                                        context.startActivity(intent)
+                                    }
                                 )
                                 Text(
                                     text = stringResource(
@@ -153,6 +171,42 @@ fun PersonDetail(navController: NavController, personViewModel: PersonViewModel)
                                         selectedPerson?.location?.street?.name.toString(),
                                         selectedPerson?.location?.street?.number.toString(),
                                         selectedPerson?.location?.city.toString()
+                                    ),
+                                    modifier = Modifier.clickable {
+                                        val latitude = selectedPerson?.location?.coordinates?.latitude ?: 0.0
+                                        val longitude = selectedPerson?.location?.coordinates?.longitude ?: 0.0
+                                        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude")
+                                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                                        mapIntent.setPackage("com.google.android.apps.maps")
+                                        context.startActivity(mapIntent)
+                                    }
+                                )
+
+                                Text(
+                                    text = stringResource(
+                                        R.string.detail_person_birthdate_label,
+                                        DateUtils.formatDate(selectedPerson?.dob!!.date)
+                                    )
+                                )
+
+                                Text(
+                                    text = stringResource(
+                                        R.string.detail_person_age_label,
+                                        selectedPerson?.dob!!.age.toString()
+                                    )
+                                )
+
+                                Text(
+                                    text = stringResource(
+                                        R.string.detail_person_username_label,
+                                        selectedPerson?.login!!.username
+                                    )
+                                )
+
+                                Text(
+                                    text = stringResource(
+                                        R.string.detail_person_gender_label,
+                                        selectedPerson?.gender.toString()
                                     )
                                 )
                             }
